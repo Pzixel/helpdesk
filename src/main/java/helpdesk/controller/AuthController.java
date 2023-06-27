@@ -12,17 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import helpdesk.models.User;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.Arrays;
 
 @RestController
@@ -57,15 +46,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Wrong password");
         }
 
-        String token = Jwts.builder()
-                .setSubject(matchingUser.getEmail())
-                .claim("roles", matchingUser.getRole())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(SignatureAlgorithm.HS256, "secretkey")
-                .compact();
-
-        Cookie jwtTokenCookie = new Cookie("jwtToken", token);
+        Cookie jwtTokenCookie = new Cookie("user-id", "c2FtLnNtaXRoQGV4YW1wbGUuY29t");
         jwtTokenCookie.setMaxAge(86400);
         jwtTokenCookie.setSecure(true);
         jwtTokenCookie.setHttpOnly(true);
