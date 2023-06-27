@@ -1,5 +1,6 @@
 package helpdesk.controller;
 
+import helpdesk.dal.UserRepository;
 import helpdesk.models.Role;
 import helpdesk.utils.HashHelper;
 import jakarta.servlet.http.Cookie;
@@ -15,25 +16,23 @@ import helpdesk.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 import java.util.function.Function;
-import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @RestController
 @EnableAutoConfiguration
 public class AuthController {
     private static final String myPrivateKey = "abcdefff3c0f2ada3b21e0c73b997a9dc0c3ff0b4f61913dfef5d12b0a10f81986abcdefff3c0f2ada3b21e0c73b997a9dc0c3ff0b4f61913dfef5d12b0a10f81986";
+    private final UserRepository userRepository;
 
-    private static final User[] users = {
-            // myCoolPwd password
-            new User("Bob@gmail.com", "a3abf03c0f2ada3b21e0c73b997a9dc0c3ff0b4f61913dfef5d12b0a10f81986", "salt", Role.EMPLOYEE),
-            // alicaRules
-            new User("Alice@gmail.com", "69f55e9293a89a3e1f9e75b393ffb7a447aecdea854f42a80166a3bb59e65ed8", "biabd^&^&", Role.MANAGER),
-            // yasha
-            new User("Luna@gmail.com", "9243d6b7d5e1500f355c5dcbd15c86669d082c9416a2f5621c3eac2ab5ef5d31", "config", Role.ENGINEER),
-    };
+    @Autowired
+    public AuthController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @RequestMapping("/login")
     ResponseEntity<?> login(
@@ -41,10 +40,7 @@ public class AuthController {
             @RequestParam String email,
             @RequestParam String password
     ) {
-        User matchingUser = Arrays.stream(users)
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst()
-                .orElse(null);
+        User matchingUser = userRepository.findByEmail(email).orElse(null);
 
         if (matchingUser == null) {
             return ResponseEntity.badRequest().body("User not found");
