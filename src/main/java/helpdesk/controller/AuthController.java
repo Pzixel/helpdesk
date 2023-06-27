@@ -34,7 +34,7 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping("/login")
+    @RequestMapping("/auth/login")
     ResponseEntity<?> login(
             HttpServletResponse response,
             @RequestParam String email,
