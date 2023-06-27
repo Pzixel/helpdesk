@@ -4,36 +4,32 @@ package helpdesk.models;
 //        A Manager
 //        An Engineer
 
-enum Role {
-    EMPLOYEE, MANAGER, ENGINEER
-}
-
-class User {
-    private final String name;
+public class User {
     private final String email;
-    private final String password;
+    private final String passwordHash;
+    private final String passwordSalt;
     private final Role role;
 
-    public User(String name, String email, String password, Role role) {
-        this.name = name;
+    public User(String email, String passwordHash, String passwordSalt, Role role) {
         this.email = email;
-        this.password = password;
+        this.passwordHash = passwordHash;
+        this.passwordSalt = passwordSalt;
         this.role = role;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public Role getRole() {
-        return role;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }
