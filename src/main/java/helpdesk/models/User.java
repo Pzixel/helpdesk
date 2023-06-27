@@ -5,12 +5,14 @@ package helpdesk.models;
 //        An Engineer
 
 public class User {
+    private final Long id;
     private final String email;
     private final String passwordHash;
     private final String passwordSalt;
     private final Role role;
 
-    public User(String email, String passwordHash, String passwordSalt, Role role) {
+    public User(Long id, String email, String passwordHash, String passwordSalt, Role role) {
+        this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;
         this.passwordSalt = passwordSalt;
