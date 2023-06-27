@@ -2,10 +2,12 @@ package helpdesk.dal;
 
 import helpdesk.models.Role;
 import helpdesk.models.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+@Repository
 public class UserRepository {
     private static final User[] users = {
             // myCoolPwd password
