@@ -1,6 +1,7 @@
 package helpdesk.services;
 
 import helpdesk.dal.UserRepository;
+import helpdesk.models.JwtUser;
 import helpdesk.models.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,11 +27,19 @@ public class UserService {
 
     public String getJwtToken(User user) {
         return Jwts.builder()
-                .setSubject(user.getEmail())
-                .claim("roles", user.getRole())
+                .setSubject(user.getId().toString())
+                .claim("data", new JwtUser(user.getId(), user.getEmail(), user.getRole()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(SignatureAlgorithm.HS512, myPrivateKey)
                 .compact();
+    }
+
+    public JwtUser getJwtUser(String token) {
+        return Jwts.parser()
+                .setSigningKey(myPrivateKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("data", JwtUser.class);
     }
 }
