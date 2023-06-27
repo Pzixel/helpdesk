@@ -2,6 +2,7 @@ package helpdesk.controller;
 
 import helpdesk.dal.UserRepository;
 import helpdesk.models.Role;
+import helpdesk.services.UserService;
 import helpdesk.utils.HashHelper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,12 +27,11 @@ import org.springframework.stereotype.Service;
 @RestController
 @EnableAutoConfiguration
 public class AuthController {
-    private static final String myPrivateKey = "abcdefff3c0f2ada3b21e0c73b997a9dc0c3ff0b4f61913dfef5d12b0a10f81986abcdefff3c0f2ada3b21e0c73b997a9dc0c3ff0b4f61913dfef5d12b0a10f81986";
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public AuthController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping("/auth/login")
@@ -40,7 +40,7 @@ public class AuthController {
             @RequestParam String email,
             @RequestParam String password
     ) {
-        User matchingUser = userRepository.findByEmail(email).orElse(null);
+        User matchingUser = userService.findByEmail(email).orElse(null);
 
         if (matchingUser == null) {
             return ResponseEntity.badRequest().body("User not found");
@@ -51,14 +51,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Wrong password");
         }
 
-        String token = Jwts.builder()
-                .setSubject(matchingUser.getEmail())
-                .claim("roles", matchingUser.getRole())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(SignatureAlgorithm.HS512, myPrivateKey)
-                .compact();
-
+        String token = userService.getJwtToken(matchingUser);
         Cookie jwtTokenCookie = new Cookie("jwtToken", token);
         jwtTokenCookie.setMaxAge(86400);
         jwtTokenCookie.setSecure(true);
