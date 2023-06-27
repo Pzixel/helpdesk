@@ -24,6 +24,7 @@ public class Application {
         return http
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/auth/login").permitAll()
                         .anyRequest().permitAll())
             .build();
     }
