@@ -1,5 +1,6 @@
 package helpdesk;
 
+import helpdesk.services.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -32,10 +33,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class Application {
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    UserService userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -65,7 +67,6 @@ public class Application {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
