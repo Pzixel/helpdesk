@@ -34,7 +34,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @RequestMapping("/auth/login")
+    @RequestMapping("/api/auth/login")
     ResponseEntity<?> login(
             HttpServletResponse response,
             @RequestParam String email,

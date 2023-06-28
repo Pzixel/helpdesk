@@ -24,7 +24,7 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    @RequestMapping("/tickets/myTickets")
+    @RequestMapping("api/tickets/myTickets")
     ArrayList<Ticket> myTickets(@RequestHeader(name="Authorization") String token) {
         JwtUser jwtUser = userService.getJwtUser(token);
         System.out.println(jwtUser.getId());
