@@ -2,7 +2,10 @@ package helpdesk.services;
 
 import helpdesk.dal.UserRepository;
 import helpdesk.models.JwtUser;
+import helpdesk.models.Role;
 import helpdesk.models.User;
+import helpdesk.models.UserDetailsImpl;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +46,16 @@ public class UserService implements UserDetailsService {
     }
 
     public JwtUser getJwtUser(String token) {
-        return Jwts.parser()
+        Claims claims = Jwts.parser()
                 .setSigningKey(myPrivateKey)
                 .parseClaimsJws(token)
-                .getBody()
-                .get("data", JwtUser.class);
+                .getBody();
+        java.util.LinkedHashMap o = (java.util.LinkedHashMap) claims.get("data");
+        return new JwtUser(
+                (Integer) o.get("id"),
+                (String) o.get("email"),
+                Role.fromString((String) o.get("role"))
+        );
     }
 
     @Override
@@ -56,6 +64,6 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
-        return JwtUser.build(user);
+        return UserDetailsImpl.build(user);
     }
 }

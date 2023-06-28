@@ -3,15 +3,15 @@ package helpdesk.models;
 import java.util.Date;
 
 public class Ticket {
-    private final Long id;
+    private final Integer id;
     private final String name;
     private final Date desiredDate;
     private final Urgency urgency;
     private final Status status;
 
-    private final long userId;
+    private final Integer userId;
 
-    public Ticket(Long id, String name, Date desiredDate, Urgency urgency, Status status, long userId) {
+    public Ticket(Integer id, String name, Date desiredDate, Urgency urgency, Status status, Integer userId) {
         this.id = id;
         this.name = name;
         this.desiredDate = desiredDate;
@@ -20,7 +20,7 @@ public class Ticket {
         this.userId = userId;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -40,7 +40,7 @@ public class Ticket {
         return status;
     }
 
-    public long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 }

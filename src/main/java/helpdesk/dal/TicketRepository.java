@@ -14,7 +14,7 @@ import java.util.Optional;
 public class TicketRepository {
     private final ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 
-    public ArrayList<Ticket> getTickedByUser(Long userId) {
+    public ArrayList<Ticket> getTickedByUser(Integer userId) {
         return Arrays.stream(tickets.toArray(new Ticket[0]))
                         .filter(ticket -> ticket.getUserId() == userId)
                         .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);

@@ -5,13 +5,13 @@ package helpdesk.models;
 //        An Engineer
 
 public class User {
-    private final Long id;
+    private final Integer id;
     private final String email;
     private final String passwordHash;
     private final String passwordSalt;
     private final Role role;
 
-    public User(Long id, String email, String passwordHash, String passwordSalt, Role role) {
+    public User(Integer id, String email, String passwordHash, String passwordSalt, Role role) {
         this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;
@@ -19,7 +19,7 @@ public class User {
         this.role = role;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

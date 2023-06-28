@@ -21,7 +21,7 @@ public class TicketService {
         this.ticketRepository = TicketRepository;
     }
 
-    public ArrayList<Ticket> getTickedByUser(Long userId) {
+    public ArrayList<Ticket> getTickedByUser(Integer userId) {
         return ticketRepository.getTickedByUser(userId);
     }
 }
